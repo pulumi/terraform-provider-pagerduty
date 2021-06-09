@@ -1,12 +1,12 @@
 module github.com/PagerDuty/terraform-provider-pagerduty
 
-go 1.14
+go 1.16
 
 require (
 	cloud.google.com/go v0.71.0 // indirect
 	github.com/google/go-querystring v1.0.0 // indirect
 	github.com/hashicorp/terraform-plugin-sdk v1.7.0
-	github.com/heimweh/go-pagerduty v0.0.0-20210401200608-e772e426d1d0
+	github.com/heimweh/go-pagerduty v0.0.0-20210412205347-cc0e5d3c14d4
 	golang.org/x/tools v0.0.0-20201110124207-079ba7bd75cd // indirect
 	google.golang.org/api v0.35.0 // indirect
 	google.golang.org/genproto v0.0.0-20201109203340-2640f1f9cdfb // indirect
