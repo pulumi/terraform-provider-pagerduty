@@ -5,13 +5,12 @@ import (
 	"log"
 	"runtime"
 
-	"github.com/hashicorp/terraform-plugin-sdk/helper/schema"
-	"github.com/hashicorp/terraform-plugin-sdk/terraform"
+	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 	"github.com/heimweh/go-pagerduty/pagerduty"
 )
 
 // Provider represents a resource provider in Terraform
-func Provider() terraform.ResourceProvider {
+func Provider() *schema.Provider {
 	p := &schema.Provider{
 		Schema: map[string]*schema.Schema{
 			"skip_credentials_validation": {
@@ -40,6 +39,7 @@ func Provider() terraform.ResourceProvider {
 			"pagerduty_business_service":    dataSourcePagerDutyBusinessService(),
 			"pagerduty_priority":            dataSourcePagerDutyPriority(),
 			"pagerduty_ruleset":             dataSourcePagerDutyRuleset(),
+			"pagerduty_tag":                 dataSourcePagerDutyTag(),
 		},
 
 		ResourcesMap: map[string]*schema.Resource{
@@ -62,6 +62,8 @@ func Provider() terraform.ResourceProvider {
 			"pagerduty_business_service":       resourcePagerDutyBusinessService(),
 			"pagerduty_service_dependency":     resourcePagerDutyServiceDependency(),
 			"pagerduty_response_play":          resourcePagerDutyResponsePlay(),
+			"pagerduty_tag":                    resourcePagerDutyTag(),
+			"pagerduty_tag_assignment":         resourcePagerDutyTagAssignment(),
 			"pagerduty_service_event_rule":     resourcePagerDutyServiceEventRule(),
 			"pagerduty_slack_connection":       resourcePagerDutySlackConnection(),
 		},
