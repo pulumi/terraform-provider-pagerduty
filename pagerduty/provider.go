@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"log"
 	"runtime"
+	"strings"
 
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 	"github.com/heimweh/go-pagerduty/pagerduty"
@@ -23,6 +24,18 @@ func Provider() *schema.Provider {
 				Type:        schema.TypeString,
 				Required:    true,
 				DefaultFunc: schema.EnvDefaultFunc("PAGERDUTY_TOKEN", nil),
+			},
+
+			"user_token": {
+				Type:        schema.TypeString,
+				Optional:    true,
+				DefaultFunc: schema.EnvDefaultFunc("PAGERDUTY_USER_TOKEN", nil),
+			},
+
+			"service_region": {
+				Type:     schema.TypeString,
+				Optional: true,
+				Default:  "",
 			},
 		},
 
@@ -101,12 +114,23 @@ func handleNotFoundError(err error, d *schema.ResourceData) error {
 }
 
 func providerConfigure(data *schema.ResourceData, terraformVersion string) (interface{}, error) {
+	var ServiceRegion = strings.ToLower(data.Get("service_region").(string))
+
+	if ServiceRegion == "us" || ServiceRegion == "" {
+		ServiceRegion = ""
+	} else {
+		ServiceRegion = ServiceRegion + "."
+	}
+
 	config := Config{
+		ApiUrl:              "https://api." + ServiceRegion + "pagerduty.com",
+		AppUrl:              "https://app." + ServiceRegion + "pagerduty.com",
 		SkipCredsValidation: data.Get("skip_credentials_validation").(bool),
 		Token:               data.Get("token").(string),
+		UserToken:           data.Get("user_token").(string),
 		UserAgent:           fmt.Sprintf("(%s %s) Terraform/%s", runtime.GOOS, runtime.GOARCH, terraformVersion),
 	}
 
 	log.Println("[INFO] Initializing PagerDuty client")
-	return config.Client()
+	return &config, nil
 }
