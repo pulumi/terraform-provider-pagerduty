@@ -2,6 +2,7 @@ package pagerduty
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"log"
 	"strings"
@@ -12,6 +13,10 @@ import (
 	"github.com/heimweh/go-pagerduty/pagerduty"
 )
 
+const (
+	errEmailIntegrationMustHaveEmail = "integration_email attribute must be set for an integration type generic_email_inbound_integration"
+)
+
 func resourcePagerDutyServiceIntegration() *schema.Resource {
 	return &schema.Resource{
 		Create: resourcePagerDutyServiceIntegrationCreate,
@@ -20,8 +25,8 @@ func resourcePagerDutyServiceIntegration() *schema.Resource {
 		Delete: resourcePagerDutyServiceIntegrationDelete,
 		CustomizeDiff: func(context context.Context, diff *schema.ResourceDiff, i interface{}) error {
 			t := diff.Get("type").(string)
-			if t == "generic_email_inbound_integration" && diff.Get("integration_email").(string) == "" {
-				return fmt.Errorf("integration_email attribute must be set for an integration type generic_email_inbound_integration")
+			if t == "generic_email_inbound_integration" && diff.Get("integration_email").(string) == "" && diff.NewValueKnown("integration_email") {
+				return errors.New(errEmailIntegrationMustHaveEmail)
 			}
 			return nil
 		},
@@ -82,7 +87,7 @@ func resourcePagerDutyServiceIntegration() *schema.Resource {
 	}
 }
 
-func buildServiceIntegrationStruct(d *schema.ResourceData) *pagerduty.Integration {
+func buildServiceIntegrationStruct(d *schema.ResourceData) (*pagerduty.Integration, error) {
 	serviceIntegration := &pagerduty.Integration{
 		Name: d.Get("name").(string),
 		Type: "service_integration",
@@ -111,11 +116,19 @@ func buildServiceIntegrationStruct(d *schema.ResourceData) *pagerduty.Integratio
 		}
 	}
 
-	return serviceIntegration
+	if serviceIntegration.Type == "generic_email_inbound_integration" && serviceIntegration.IntegrationEmail == "" {
+		return nil, errors.New(errEmailIntegrationMustHaveEmail)
+	}
+
+	return serviceIntegration, nil
 }
 
 func fetchPagerDutyServiceIntegration(d *schema.ResourceData, meta interface{}, errCallback func(error, *schema.ResourceData) error) error {
-	client, _ := meta.(*Config).Client()
+	client, err := meta.(*Config).Client()
+	if err != nil {
+		return err
+	}
+
 	service := d.Get("service").(string)
 
 	o := &pagerduty.GetIntegrationOptions{}
@@ -161,9 +174,15 @@ func fetchPagerDutyServiceIntegration(d *schema.ResourceData, meta interface{}, 
 }
 
 func resourcePagerDutyServiceIntegrationCreate(d *schema.ResourceData, meta interface{}) error {
-	client, _ := meta.(*Config).Client()
+	client, err := meta.(*Config).Client()
+	if err != nil {
+		return err
+	}
 
-	serviceIntegration := buildServiceIntegrationStruct(d)
+	serviceIntegration, err := buildServiceIntegrationStruct(d)
+	if err != nil {
+		return err
+	}
 
 	log.Printf("[INFO] Creating PagerDuty service integration %s", serviceIntegration.Name)
 
@@ -196,9 +215,15 @@ func resourcePagerDutyServiceIntegrationRead(d *schema.ResourceData, meta interf
 }
 
 func resourcePagerDutyServiceIntegrationUpdate(d *schema.ResourceData, meta interface{}) error {
-	client, _ := meta.(*Config).Client()
+	client, err := meta.(*Config).Client()
+	if err != nil {
+		return err
+	}
 
-	serviceIntegration := buildServiceIntegrationStruct(d)
+	serviceIntegration, err := buildServiceIntegrationStruct(d)
+	if err != nil {
+		return err
+	}
 
 	service := d.Get("service").(string)
 
@@ -212,7 +237,10 @@ func resourcePagerDutyServiceIntegrationUpdate(d *schema.ResourceData, meta inte
 }
 
 func resourcePagerDutyServiceIntegrationDelete(d *schema.ResourceData, meta interface{}) error {
-	client, _ := meta.(*Config).Client()
+	client, err := meta.(*Config).Client()
+	if err != nil {
+		return err
+	}
 
 	service := d.Get("service").(string)
 
@@ -228,7 +256,10 @@ func resourcePagerDutyServiceIntegrationDelete(d *schema.ResourceData, meta inte
 }
 
 func resourcePagerDutyServiceIntegrationImport(d *schema.ResourceData, meta interface{}) ([]*schema.ResourceData, error) {
-	client, _ := meta.(*Config).Client()
+	client, err := meta.(*Config).Client()
+	if err != nil {
+		return []*schema.ResourceData{}, err
+	}
 
 	ids := strings.Split(d.Id(), ".")
 
@@ -237,7 +268,7 @@ func resourcePagerDutyServiceIntegrationImport(d *schema.ResourceData, meta inte
 	}
 	sid, id := ids[0], ids[1]
 
-	_, _, err := client.Services.GetIntegration(sid, id, nil)
+	_, _, err = client.Services.GetIntegration(sid, id, nil)
 	if err != nil {
 		return []*schema.ResourceData{}, err
 	}
