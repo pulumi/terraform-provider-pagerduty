@@ -8,7 +8,7 @@ description: |-
 
 # pagerduty\_escalation_policy
 
-An [escalation policy](https://developer.pagerduty.com/api-reference/reference/REST/openapiv3.json/paths/~1escalation_policies/get) determines what user or schedule will be notified first, second, and so on when an incident is triggered. Escalation policies are used by one or more services.
+An [escalation policy](https://developer.pagerduty.com/api-reference/b3A6Mjc0ODEyNQ-create-an-escalation-policy) determines what user or schedule will be notified first, second, and so on when an incident is triggered. Escalation policies are used by one or more services.
 
 
 ## Example Usage
@@ -33,11 +33,11 @@ resource "pagerduty_escalation_policy" "example" {
   rule {
     escalation_delay_in_minutes = 10
     target {
-      type = "user"
+      type = "user_reference"
       id   = pagerduty_user.example.id
     }
     target {
-      type = "user"
+      type = "user_reference"
       id   = pagerduty_user.example2.id
     }
   }
@@ -55,12 +55,10 @@ The following arguments are supported:
 * `num_loops` - (Optional) The number of times the escalation policy will repeat after reaching the end of its escalation.
 * `rule` - (Required) An Escalation rule block. Escalation rules documented below.
 
-
 Escalation rules (`rule`) supports the following:
 
   * `escalation_delay_in_minutes` - (Required) The number of minutes before an unacknowledged incident escalates away from this rule.
   * `targets` - (Required) A target block. Target blocks documented below.
-
 
 Targets (`target`) supports the following:
 
