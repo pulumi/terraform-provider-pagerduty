@@ -510,10 +510,16 @@ func flattenService(d *schema.ResourceData, service *pagerduty.Service) error {
 }
 
 func expandAlertGroupingParameters(v interface{}) *pagerduty.AlertGroupingParameters {
-	riur := v.([]interface{})[0].(map[string]interface{})
 	alertGroupingParameters := &pagerduty.AlertGroupingParameters{
 		Config: &pagerduty.AlertGroupingConfig{},
 	}
+	// First We capture a possible nil value for the interface to avoid the a
+	// panic
+	pre := v.([]interface{})[0]
+	if isNilFunc(pre) {
+		return nil
+	}
+	riur := pre.(map[string]interface{})
 	if len(riur["type"].(string)) > 0 {
 		gt := riur["type"].(string)
 		alertGroupingParameters.Type = &gt
@@ -548,7 +554,13 @@ func expandAlertGroupingConfig(v interface{}) *pagerduty.AlertGroupingConfig {
 	return alertGroupingConfig
 }
 func flattenAlertGroupingParameters(v *pagerduty.AlertGroupingParameters) interface{} {
-	alertGroupingParameters := map[string]interface{}{"type": "", "config": []map[string]interface{}{{"aggregate": nil, "fields": nil, "timeout": nil}}}
+	alertGroupingParameters := map[string]interface{}{}
+
+	if v.Config == nil && v.Type == nil {
+		return []interface{}{alertGroupingParameters}
+	} else {
+		alertGroupingParameters = map[string]interface{}{"type": "", "config": []map[string]interface{}{{"aggregate": nil, "fields": nil, "timeout": nil}}}
+	}
 
 	if v.Type != nil {
 		alertGroupingParameters["type"] = v.Type

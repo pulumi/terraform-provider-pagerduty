@@ -20,6 +20,7 @@ This example assumes services used in the `route_to` configuration already exist
 resource "pagerduty_event_orchestration_router" "router" {
   event_orchestration = pagerduty_event_orchestration.my_monitor.id
   set {
+    id = "start"
     rule {
       label = "Events relating to our relational database"
       condition {
@@ -29,7 +30,7 @@ resource "pagerduty_event_orchestration_router" "router" {
         expression = "event.source matches regex 'db[0-9]+-server'"
       }
       actions {
-        route_to = pageduty_service.database.id
+        route_to = pagerduty_service.database.id
       }
     }
     rule {
@@ -89,5 +90,5 @@ The following attributes are exported:
 Router can be imported using the `id` of the Event Orchestration, e.g.
 
 ```
-$ terraform import pagerduty_event_orchestration_router 1b49abe7-26db-4439-a715-c6d883acfb3e
+$ terraform import pagerduty_event_orchestration_router.router 1b49abe7-26db-4439-a715-c6d883acfb3e
 ```
