@@ -1,36 +1,135 @@
+## 2.9.3 (January 26, 2023)
+
+BUG FIXES:
+*  `resource/pagerduty_team_membership`: EF-3964 Address `team_membership` inconsistency after `create` and `update` ([#621](https://github.com/PagerDuty/terraform-provider-pagerduty/pull/621))
+
+## 2.9.2 (January 17, 2023)
+
+BUG FIXES:
+*  `dependency/go-pagerduty`: update `github.com/heimweh/go-pagerduty` to fix offset pagination ([#615](https://github.com/PagerDuty/terraform-provider-pagerduty/pull/615))
+
+## 2.9.1 (January 9, 2023)
+
+IMPROVEMENTS:
+
+* `resource/pagerduty_incident_workflow`: add team support for incident workflows ([#609](https://github.com/PagerDuty/terraform-provider-pagerduty/pull/609))
+* replace `ValidateValueFunc` with `ValidateValueDiagFunc` due to deprecation on the following resources. ([#605](https://github.com/PagerDuty/terraform-provider-pagerduty/pull/605))
+	- `resource/pagerduty_event_orchestration`
+	- `resource/pagerduty_automation_actions_action`
+	- `resource/pagerduty_automation_actions_runner`
+	- `resource/pagerduty_business_service`
+	- `resource/pagerduty_business_service_subscriber`
+	- `resource/pagerduty_escalation_policy`
+	- `resource/pagerduty_event_orchestration_service`
+	- `resource/pagerduty_event_orchestration_unrouted`
+	- `resource/pagerduty_incident_workflow_trigger`
+	- `resource/pagerduty_ruleset_rule`
+	- `resource/pagerduty_schedule`
+	- `resource/pagerduty_service`
+	- `resource/pagerduty_service_dependency`
+	- `resource/pagerduty_service_event_rule`
+	- `resource/pagerduty_service_integration`
+	- `resource/pagerduty_slack_connection`
+	- `resource/pagerduty_tag_assignment`
+	- `resource/pagerduty_team_membership`
+	- `resource/pagerduty_user`
+	- `resource/pagerduty_user_contact_method`
+	- `resource/pagerduty_user_notification_rule`
+	- `resource/pagerduty_webhook_subscription`
+
+## 2.9.0 (January 9, 2023)
+
+FEATURES:
+
+* `data/pagerduty_automation_actions_action`: Add support for data.pagerduty_automation_actions_action ([#601](https://github.com/PagerDuty/terraform-provider-pagerduty/pull/601))
+* `resource/pagerduty_automation_actions_runner_team_association`: Add support for Automation Actions' Runner association with a Team ([#607](https://github.com/PagerDuty/terraform-provider-pagerduty/pull/607))
+* `resource/pagerduty_automation_actions_action_service_association`: Add support for Automation Actions' Action association to a Service ([#608](https://github.com/PagerDuty/terraform-provider-pagerduty/pull/608))
+
+
+IMPROVEMENTS:
+* `resource/pagerduty_automation_actions_action`, `resource/pagerduty_automation_actions_runner`: Add support for the update operation on pagerduty_automation_actions_action and pagerduty_automation_actions_runner ([#603](https://github.com/PagerDuty/terraform-provider-pagerduty/pull/603))
+
+## 2.8.1 (December 23, 2022)
+
+IMPROVEMENTS:
+* `resource/pagerduty_schedule`: Address: Schedules can't be deleted when they have open incidents ([#602](https://github.com/PagerDuty/terraform-provider-pagerduty/pull/602))
+
+## 2.8.0 (December 23, 2022)
+
+FEATURES:
+* Support **Incident Workflows** via several new resources. ([#596](https://github.com/PagerDuty/terraform-provider-pagerduty/pull/596))
+  - `resource/pagerduty_incident_workflow_trigger`
+  - `resource/pagerduty_incident_workflow`
+  - `data_source/pagerduty_incident_workflow`
+* `resource/pagerduty_automation_actions_action_team_association`: Add support for Automation Actions' Action association to a Team ([#600](https://github.com/PagerDuty/terraform-provider-pagerduty/pull/600))
+* `resource/pagerduty_automation_actions_action`: Add support for pagerduty_automation_actions_action ([#599](https://github.com/PagerDuty/terraform-provider-pagerduty/pull/599))
+
+## 2.7.0 (December 12, 2022)
+
+FEATURES:
+* `resource/pagerduty_automation_actions_runner`, `data_source/pagerduty_automation_actions_runner`: Add support for `pagerduty_automation_actions_runner` and `data.pagerduty_automation_actions_runner` ([#595](https://github.com/PagerDuty/terraform-provider-pagerduty/pull/595))
+
+## 2.6.5 (December 12, 2022)
+
+BUG FIXES:
+* `resource/pagerduty_user_contact_method`: Address: Unique contact method error not being captured ([#586](https://github.com/PagerDuty/terraform-provider-pagerduty/pull/586))
+
+## 2.6.4 (November 3, 2022)
+
+BUG FIXES:
+* `resource/pagerduty_service`: Test and handle time-based alert grouping parameters ([#582](https://github.com/PagerDuty/terraform-provider-pagerduty/pull/582))
+
+## 2.6.3 (October 11, 2022)
+
+BUG FIXES:
+* `resource/pagerduty_service`: Address: `pagerduty_service.alert_grouping_parameters.config` block parsing ([#570](https://github.com/PagerDuty/terraform-provider-pagerduty/pull/570))
+* `resource/pagerduty_service`: resource_pagerduty_service: skip response_play with "null" value ([#573](https://github.com/PagerDuty/terraform-provider-pagerduty/pull/573))
+
+IMPROVEMENTS:
+* Docs: `resource/tag_assignment`: Adds proper documentation for pagerduty_tag resource in tag_assignmen... ([#563](https://github.com/PagerDuty/terraform-provider-pagerduty/pull/563))
+* Docs: `README.md`: Updates developer docs with more helpful setup information ([#571](https://github.com/PagerDuty/terraform-provider-pagerduty/pull/571))
+
+## 2.6.2 (September 8, 2022)
+
+BUG FIXES:
+* `resource/pagerduty_schedule`: Test rule removal rather than update for Escalation Policy Dependent Schedule ([#564](https://github.com/PagerDuty/terraform-provider-pagerduty/pull/564))
+
+IMPROVEMENTS:
+* Docs: `changelog.md`: Fixing PR Links in Changelog ([#566](https://github.com/PagerDuty/terraform-provider-pagerduty/pull/566))
+
 ## 2.6.1 (August 25, 2022)
 
 BUG FIXES:
-* `resource/pagerduty_schedule`: Add support for gracefully destroy `pagerduty_schedule` ([#561]([https://github.com/PagerDuty/terraform-provider-pagerduty/pull/561](https://github.com/PagerDuty/terraform-provider-pagerduty/pull/561)))
+* `resource/pagerduty_schedule`: Add support for gracefully destroy `pagerduty_schedule` ([#561](https://github.com/PagerDuty/terraform-provider-pagerduty/pull/561))
 
 
 ## 2.6.0 (August 17, 2022)
 
 FEATURES:
-* `data_source/pagerduty_users`: Add `pagerduty_users` data source ([#545]([https://github.com/PagerDuty/terraform-provider-pagerduty/pull/545](https://github.com/PagerDuty/terraform-provider-pagerduty/pull/545)))
-* `resource/pagerduty_service`: Add support for service level `auto_pause_notifications_parameters` ([#525]([https://github.com/PagerDuty/terraform-provider-pagerduty/pull/525](https://github.com/PagerDuty/terraform-provider-pagerduty/pull/525)))
+* `data_source/pagerduty_users`: Add `pagerduty_users` data source ([#545](https://github.com/PagerDuty/terraform-provider-pagerduty/pull/545))
+* `resource/pagerduty_service`: Add support for service level `auto_pause_notifications_parameters` ([#525](https://github.com/PagerDuty/terraform-provider-pagerduty/pull/525))
 
 IMPROVEMENTS:
-* `resource/pagerduty_service`: Add `response_play` field to service ([#515]([https://github.com/PagerDuty/terraform-provider-pagerduty/pull/515](https://github.com/PagerDuty/terraform-provider-pagerduty/pull/515)))
-* Docs: `resource/pagerduty_service`: Fixed Docs Bugs in pagerduty_service Ref: Issue #522 ([#554]([https://github.com/PagerDuty/terraform-provider-pagerduty/pull/554](https://github.com/PagerDuty/terraform-provider-pagerduty/pull/554)))
+* `resource/pagerduty_service`: Add `response_play` field to service ([#515](https://github.com/PagerDuty/terraform-provider-pagerduty/pull/515)))
+* Docs: `resource/pagerduty_service`: Fixed Docs Bugs in pagerduty_service Ref: Issue #522 ([#554](https://github.com/PagerDuty/terraform-provider-pagerduty/pull/554))
 
 BUG FIXES:
-* `resource/pagerduty_team_membership`: Add support for gracefully destroy `pagerduty_team_membership` ([#558]([https://github.com/PagerDuty/terraform-provider-pagerduty/pull/558](https://github.com/PagerDuty/terraform-provider-pagerduty/pull/558)))
+* `resource/pagerduty_team_membership`: Add support for gracefully destroy `pagerduty_team_membership` ([#558](https://github.com/PagerDuty/terraform-provider-pagerduty/pull/558))
 
 
 ## 2.5.2 (July 12, 2022)
 IMPROVEMENTS:
-* `goreleaser`: update to go-version 1.17 ([#543]([https://github.com/PagerDuty/terraform-provider-pagerduty/pull/543](https://github.com/PagerDuty/terraform-provider-pagerduty/pull/543)))
-* `resource/pagerduty_schedule`: Addressing output not showing rendered_coverage_percentage ([#528]([https://github.com/PagerDuty/terraform-provider-pagerduty/pull/528](https://github.com/PagerDuty/terraform-provider-pagerduty/pull/528)))
-* Docs: `resource/pagerduty_event_orchestration_router`: Fix typos in the event orchestration router docs ([#536]([https://github.com/PagerDuty/terraform-provider-pagerduty/pull/536](https://github.com/PagerDuty/terraform-provider-pagerduty/pull/536)))
-* Docs: `resource/pagerduty_event_orchestration_router`, `resource/pagerduty_event_orchestration_service`, `resource/pagerduty_event_orchestration_unrouted`: Fix docs for event_orchestration resources import ([#529]([https://github.com/PagerDuty/terraform-provider-pagerduty/pull/529](https://github.com/PagerDuty/terraform-provider-pagerduty/pull/529)))
-* Docs: `resource/pagerduty_extension_servicenow`: Wrong Extension Schema ([#487]([https://github.com/PagerDuty/terraform-provider-pagerduty/pull/487](https://github.com/PagerDuty/terraform-provider-pagerduty/pull/487)))
+* `goreleaser`: update to go-version 1.17 ([#543](https://github.com/PagerDuty/terraform-provider-pagerduty/pull/543))
+* `resource/pagerduty_schedule`: Addressing output not showing rendered_coverage_percentage ([#528](https://github.com/PagerDuty/terraform-provider-pagerduty/pull/528))
+* Docs: `resource/pagerduty_event_orchestration_router`: Fix typos in the event orchestration router docs ([#536](https://github.com/PagerDuty/terraform-provider-pagerduty/pull/536))
+* Docs: `resource/pagerduty_event_orchestration_router`, `resource/pagerduty_event_orchestration_service`, `resource/pagerduty_event_orchestration_unrouted`: Fix docs for event_orchestration resources import ([#529](https://github.com/PagerDuty/terraform-provider-pagerduty/pull/529))
+* Docs: `resource/pagerduty_extension_servicenow`: Wrong Extension Schema ([#487](https://github.com/PagerDuty/terraform-provider-pagerduty/pull/487))
 
 BUG FIXES:
-* `resource/pagerduty_service`: remove `expectNonEmptyPlanFromTest` from Service test responding to feedback left in PR#527 ([#542]([https://github.com/PagerDuty/terraform-provider-pagerduty/pull/542](https://github.com/PagerDuty/terraform-provider-pagerduty/pull/542)))
-* `resource/pagerduty_service_dependency`: add input validation and drift detection during deletion for `service_dependency` ([#530]([https://github.com/PagerDuty/terraform-provider-pagerduty/pull/530](https://github.com/PagerDuty/terraform-provider-pagerduty/pull/530)))
-* `data/pagerduty_business_services`, `data/extension_schema`, `data/priority`, `data/service`, `data/integration`, `data/tag`, `data/team`: Remove 429 check on remaining data sources ([#537]([https://github.com/PagerDuty/terraform-provider-pagerduty/pull/537](https://github.com/PagerDuty/terraform-provider-pagerduty/pull/537)))
-* `resource/pagerduty_service`: Address unable to switch off alert grouping on a service ([#527]([https://github.com/PagerDuty/terraform-provider-pagerduty/pull/527](https://github.com/PagerDuty/terraform-provider-pagerduty/pull/527)))
+* `resource/pagerduty_service`: remove `expectNonEmptyPlanFromTest` from Service test responding to feedback left in PR#527 ([#542](https://github.com/PagerDuty/terraform-provider-pagerduty/pull/542))
+* `resource/pagerduty_service_dependency`: add input validation and drift detection during deletion for `service_dependency` ([#530](https://github.com/PagerDuty/terraform-provider-pagerduty/pull/530))
+* `data/pagerduty_business_services`, `data/extension_schema`, `data/priority`, `data/service`, `data/integration`, `data/tag`, `data/team`: Remove 429 check on remaining data sources ([#537](https://github.com/PagerDuty/terraform-provider-pagerduty/pull/537))
+* `resource/pagerduty_service`: Address unable to switch off alert grouping on a service ([#527](https://github.com/PagerDuty/terraform-provider-pagerduty/pull/527))
 
 
 ## 2.5.1 (June 9, 2022)
